@@ -1,47 +1,54 @@
-#include<stdio.h>
-#include<math.h>
-#include<time.h>
+#include <stdio.h>
+#include <time.h>
 
-
-
-
-int factorial(int a);
+// Function prototypes
+unsigned long long factorial_iterative(int n);
+unsigned long long factorial_recursive(int n);
 
 int main() {
-    long int n;
+	double start_i,start_r,end_i,end_r;
+    int n;
     printf("Enter the value of n: ");
     scanf("%d", &n);
     
-  
     if (n < 0) {
         printf("Factorial is not defined for negative numbers.\n");
         return 1;
     }
 
-    long int ans = factorial(n);
-    printf("Factorial of given number is: %d\n", ans);
+    // Calculate factorial using both methods
+    start_i = clock();
+    unsigned long long ans_i = factorial_iterative(n);
+    end_i = clock();
+    start_r = clock();
+    unsigned long long ans_r = factorial_recursive(n);
+    end_r = clock();
+    
+    // cpu time
+    double cpu_time_i = (double)((end_i-start_i)/CLOCKS_PER_SEC);
+    double cpu_time_r = (double)((end_r-start_r)/CLOCKS_PER_SEC);
+    // Print the results
+    printf("Factorial (Iterative method) of %d is: %llu\n and TIME Complexity:%f", n, ans_i,cpu_time_i);
+    printf("Factorial (Recursive method) of %d is: %llu\n and TIME Complexity:%f", n, ans_r,cpu_time_r);
     
     return 0;
 }
 
+// Iterative method
+unsigned long long factorial_iterative(int n) {
+	int i;
+	
+	
+    unsigned long long result = 1; // Initialize result
+    for ( i = 1; i <= n; i++) {
+        result *= i; // Compute factorial
+    }
+    return result; // Return the result
+}
 
-int factorial(int a) {
-    long int fact = 1; 
-    long int i,n;
-    clock_t time_req;
-   
-    for (i = 1; i <= a; i++) { 
-        fact *= i;
-    }
-     time_req = clock();
-    for (i = 0; i < 200000; i++) {
-        n = log(i * i * i * i);
-    }
-     time_req = clock() - time_req;
-     printf("Processor time taken for multiplication: %f "
-           "seconds\n",
-           (float)time_req / CLOCKS_PER_SEC);
-    
-    return fact;
+// Recursive method
+unsigned long long factorial_recursive(int n) {
+    if (n == 0 || n == 1) return 1; // Base case
+    return n * factorial_recursive(n - 1); // Recursive call
 }
 
